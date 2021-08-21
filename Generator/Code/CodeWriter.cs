@@ -32,7 +32,7 @@ namespace ExcelTranslator.Generator.Code {
             } else if(ExcelUtil.IsParamSheet(dataTable.TableName))
             {
                 /* 生成常量类 */
-                string className = options.ClassNamePrefix + dataTable.TableName;
+                string className = options.ParamNamePrefix + dataTable.TableName;
                 List<ParamMember> fields = CodeUtil.GetParamMembers(dataTable);
                 builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
                 builder.AppendFormat("    public static class {0} {{", className).AppendLine();
@@ -46,7 +46,7 @@ namespace ExcelTranslator.Generator.Code {
             } else
             {
                 /* 生成数据类 */
-                string className = options.ParamNamePrefix + dataTable.TableName;
+                string className = options.ClassNamePrefix + dataTable.TableName;
                 List<ClassField> fields = CodeUtil.GetClassFields(dataTable);
                 builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
                 builder.AppendFormat("    public class {0} {{", className).AppendLine();
