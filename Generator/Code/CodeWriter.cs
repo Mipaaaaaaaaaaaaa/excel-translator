@@ -1,4 +1,5 @@
 ﻿using ExcelTranslator.Excel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -28,21 +29,38 @@ namespace ExcelTranslator.Generator.Code {
                     builder.AppendFormat("        {0} = {1},", member.name, member.value).AppendLine();
                 }
                 builder.AppendLine("    }");
-            } else {
-                /* 生成数据类 */
+            } else if(ExcelUtil.IsParamSheet(dataTable.TableName))
+            {
+                /* 生成常量类 */
                 string className = options.ClassNamePrefix + dataTable.TableName;
+                List<ParamMember> fields = CodeUtil.GetParamMembers(dataTable);
+                builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
+                builder.AppendFormat("    public static class {0} {{", className).AppendLine();
+                // 字段
+                foreach (var field in fields)
+                {
+                    builder.AppendFormat("        /// <summary> {0} </summary>", field.comment).AppendLine();
+                    builder.AppendFormat("        public static {0} {1} = {2} ;", field.type, field.name, field.value).AppendLine();
+                }
+                builder.AppendLine("    }");
+            } else
+            {
+                /* 生成数据类 */
+                string className = options.ParamNamePrefix + dataTable.TableName;
                 List<ClassField> fields = CodeUtil.GetClassFields(dataTable);
                 builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
                 builder.AppendFormat("    public class {0} {{", className).AppendLine();
                 // 字段
-                foreach (var field in fields) {
+                foreach (var field in fields)
+                {
                     builder.AppendFormat("        /// <summary> {0} </summary>", field.comment).AppendLine();
                     builder.AppendFormat("        public readonly {0} {1};", field.type, field.name).AppendLine();
                 }
                 builder.AppendLine();
                 // 构造函数
                 builder.AppendFormat("        public {0}(", className).AppendJoin(", ", fields.Select(field => $"{field.type} {field.name}")).AppendLine("){");
-                foreach (var field in fields) {
+                foreach (var field in fields)
+                {
                     builder.AppendFormat("            this.{0} = {0};", field.name).AppendLine();
                 }
                 builder.AppendLine("        }");

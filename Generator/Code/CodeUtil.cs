@@ -49,5 +49,31 @@ namespace ExcelTranslator.Generator.Code {
             }
             return fields;
         }
+
+        /// <summary> 获取常量类的字段数组 </summary>
+        public static List<ParamMember> GetParamMembers(DataTable dataTable)
+        {
+            var members = new List<ParamMember>();
+            DataColumn nameCol = dataTable.Columns[0];
+            DataColumn typeCol = dataTable.Columns[1];
+            DataColumn valueCol = dataTable.Columns[2];
+            DataColumn commentCol = dataTable.Columns[3];
+            foreach (DataRow row in dataTable.Rows)
+            {
+                string name = row[nameCol].ToString();
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+                members.Add(new ParamMember
+                {
+                    name = name.ToNamingStyle(NamingStyle.UpperCamel),
+                    type = row[typeCol].ToString(),
+                    value = row[valueCol].ToString(),
+                    comment = row[commentCol].ToString()
+                });
+            }
+            return members;
+        }
     }
 }

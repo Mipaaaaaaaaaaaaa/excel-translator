@@ -31,6 +31,12 @@ namespace ExcelTranslator.Excel {
             return sheetName.StartsWith("Enum");
         }
 
+        /// <summary> 是否为常量表格</summary>
+        public static bool IsParamSheet(string sheetName)
+        {
+            return sheetName.StartsWith("Param");
+        }
+
         /// <summary> 是否忽略该列 </summary>
         public static bool IsColumnIgnored(string columnName) {
             return columnName.StartsWith("Ignore");

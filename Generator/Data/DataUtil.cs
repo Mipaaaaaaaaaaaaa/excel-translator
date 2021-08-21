@@ -7,7 +7,7 @@ namespace ExcelTranslator.Generator.Data {
     public static class DataUtil {
         /// <summary> 是否为合法的 DataTable </summary>
         public static bool IsValidDataTable(DataTable dataTable) {
-            if (ExcelUtil.IsSheetIgnored(dataTable.TableName) || ExcelUtil.IsEnumSheet(dataTable.TableName)) {
+            if (ExcelUtil.IsSheetIgnored(dataTable.TableName) || ExcelUtil.IsEnumSheet(dataTable.TableName) || ExcelUtil.IsParamSheet(dataTable.TableName)) {
                 return false;
             }
             return dataTable.Columns.Count >= 1 && dataTable.Rows.Count >= 3;

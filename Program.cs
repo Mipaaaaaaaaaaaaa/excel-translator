@@ -33,6 +33,10 @@ namespace ExcelTranslator {
                 if (!string.IsNullOrEmpty(options.EnumNamePrefix)) {
                     Console.WriteLine($" [Enum Name Prefix]: {options.EnumNamePrefix}");
                 }
+                if (!string.IsNullOrEmpty(options.ParamNamePrefix))
+                {
+                    Console.WriteLine($" [Enum Name Prefix]: {options.ParamNamePrefix}");
+                }
                 /* 开始转译数据 */
                 DateTime startTime = DateTime.Now;
                 Execute(options);
@@ -65,7 +69,7 @@ namespace ExcelTranslator {
                     /* 开始转换 DataTable */
                     string sheetName = dataTable.TableName;
                     Console.WriteLine("  sheet {0}...", sheetName);
-                    string fileName = ExcelUtil.IsEnumSheet(sheetName) ? options.EnumNamePrefix + sheetName.Substring(4) : options.ClassNamePrefix + sheetName;
+                    string fileName = ExcelUtil.IsEnumSheet(sheetName) ? options.EnumNamePrefix + sheetName.Substring(4) : ExcelUtil.IsParamSheet(sheetName) ? options.ParamNamePrefix + sheetName.Substring(5) : options.ClassNamePrefix + sheetName;
                     /* 生成 JSON 数据 */
                     Console.WriteLine("    generate json...");
                     string jsonContent = DataWriter.DataTableToJSON(dataTable, options);
